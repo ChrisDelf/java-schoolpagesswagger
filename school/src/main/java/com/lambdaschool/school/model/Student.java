@@ -18,7 +18,7 @@ public class Student
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long studid;
 
-    @ApiModelProperty(name = "studname", value = "Student Name", example = "Todd")
+    @ApiModelProperty(name = "studname", value = "Student Name", required = true, example = "Todd")
     private String studname;
 
     @ManyToMany
