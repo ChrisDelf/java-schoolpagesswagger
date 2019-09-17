@@ -23,7 +23,7 @@ public class Swagger2Config
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors
-                        .basePackage("com.lambdaschool.restaurants"))
+                        .basePackage("com.lambdaschool.school"))
                 .paths(PathSelectors.any()).build()
                 .useDefaultResponseMessages(false) // Allows only my exception responses
                 .ignoredParameterTypes(Pageable.class) // allows only my paging parameter list
@@ -32,9 +32,9 @@ public class Swagger2Config
 
     private ApiInfo apiEndPointsInfo()
     {
-        return new ApiInfoBuilder().title("Restaurant Example")
-                .description("Restaurant Example")
-                .contact(new Contact("John Mitchell", "http://www.lambdaschool.com", "john@lambdaschool.com"))
+        return new ApiInfoBuilder().title("School Example")
+                .description("School Example")
+                .contact(new Contact("Chris Delfaus", "http://www.lambdaschool.com", "ChrisDelf@lambdaschool.com"))
                 .license("MIT").licenseUrl("https://github.com/LambdaSchool/java-crudysnacks/blob/master/LICENSE")
                 .version("1.0.0").build();
     }

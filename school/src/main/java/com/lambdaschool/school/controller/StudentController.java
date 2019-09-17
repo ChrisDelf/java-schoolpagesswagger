@@ -2,12 +2,14 @@ package com.lambdaschool.school.controller;
 
 import com.lambdaschool.school.model.Student;
 import com.lambdaschool.school.service.StudentService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -22,7 +24,7 @@ public class StudentController
     private StudentService studentService;
 
     // Please note there is no way to add students to course yet!
-
+    @ApiOperation(value = "Lists all Students",responseContainer = "List")
     @GetMapping(value = "/students", produces = {"application/json"})
     public ResponseEntity<?> listAllStudents()
     {
