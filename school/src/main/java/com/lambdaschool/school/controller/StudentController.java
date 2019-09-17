@@ -60,46 +60,69 @@ public class StudentController
                             "Multiple sort criteria are supported.")})
     @GetMapping(value = "/students", produces = {"application/json"})
     public ResponseEntity<?> listAllStudents(
-
+            HttpServletRequest request,
         @PathVariable
         @PageableDefault(page = 0, size = 3) Pageable pageable)
     {
+        Log(request);
         List<Student> myStudents = studentService.findAll();
         return new ResponseEntity<>(myStudents, HttpStatus.OK);
     }
     @ApiOperation(value = "Get a Student given it's id", response = Student.class)
     @ApiResponses(value = {
-            @ApiResponse(code=404,message = "Student Not Found", response = ErrorDetail.class),
-            @ApiResponse(code=401,message = "Not Authorized", response = ErrorDetail.class)
+            @ApiResponse(code=404 ,message = "Student Not Found", response = ErrorDetail.class),
+            @ApiResponse(code=401 ,message = "Not Authorized", response = ErrorDetail.class)
     })
     @GetMapping(value = "/Student/{StudentId}",
                 produces = {"application/json"})
-    public ResponseEntity<?> getStudentById(@ApiParam(value = "Student id", required = true, example = "1")
+    public ResponseEntity<?> getStudentById(
+            HttpServletRequest request,
+            @ApiParam(value = "Student id", required = true, example = "1")
             @PathVariable
                     Long StudentId)
     {
+        Log(request);
         Student r = studentService.findStudentById(StudentId);
         return new ResponseEntity<>(r, HttpStatus.OK);
     }
 
     @ApiOperation(value = "Search for a student by the name container", responseContainer = "List")
+    @ApiResponses(value = {
+            @ApiResponse(code=404,message = "Student Not Found", response = ErrorDetail.class),
+            @ApiResponse(code=401,message = "Not Authorized", response = ErrorDetail.class),
+
+    })
     @GetMapping(value = "/student/namelike/{name}",
                 produces = {"application/json"})
     public ResponseEntity<?> getStudentByNameContaining(
+            HttpServletRequest request,
             @PathVariable String name)
     {
+        Log(request);
         List<Student> myStudents = studentService.findStudentByNameLike(name);
         return new ResponseEntity<>(myStudents, HttpStatus.OK);
     }
 
+
+    ///////
     @ApiOperation(value="Add Student", response = void.class, notes = "Location of new Student in Location header")
+    @ApiResponses(value = {
+            @ApiResponse(code=401,message = "Not allowed", response = ErrorDetail.class),
+            @ApiResponse(code=500,message = "Error in adding student", response = ErrorDetail.class),
+            @ApiResponse(code=400,message = "Incorrect fields", response = ErrorDetail.class),
+            @ApiResponse(code = 404, message = "Not Found", response = ErrorDetail.class)
+    })
     @PostMapping(value = "/Student",
+
                  consumes = {"application/json"},
                  produces = {"application/json"})
-    public ResponseEntity<?> addNewStudent(@Valid
+    public ResponseEntity<?> addNewStudent( HttpServletRequest request,
+                                            @Valid
                                            @RequestBody
                                                    Student newStudent) throws URISyntaxException
     {
+        Log(request);
+
         newStudent = studentService.save(newStudent);
 
         // set the location header for the newly created resource
@@ -109,7 +132,7 @@ public class StudentController
 
         return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
     }
-
+//////
     @ApiOperation(value = "Edit a Student using their Id", response = void.class)
     @PutMapping(value = "/Student/{Studentid}")
     public ResponseEntity<?> updateStudent(
@@ -123,6 +146,11 @@ public class StudentController
     }
 
     @ApiOperation(value = "Delete Student going by their Id", response = void.class)
+    @ApiResponses(value = {
+            @ApiResponse(code=401, message = "Not Authorized", response = ErrorDetail.class),
+            @ApiResponse(code = 404, message = "Not Found", response = ErrorDetail.class),
+            @ApiResponse(code=500,message = "Error Deleting", response = ErrorDetail.class)
+    })
     @DeleteMapping("/Student/{Studentid}")
     public ResponseEntity<?> deleteStudentById(
             @PathVariable
